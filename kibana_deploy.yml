@@ -33,3 +33,12 @@
   tasks:
     - name: entry_point_sh start
       shell: "{{ play_book_dir }}/entrypoint.sh"
+
+- name: kibana start
+  hosts: servers
+  become: yes
+  vars_files:
+    - /data/work/kibana_8.x_ansible/main.yml
+  tasks:
+    - name: kibana start
+      shell: "systemctl start kibana.service"
