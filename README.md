@@ -28,6 +28,7 @@
 
 - `download and install Kibana`: 키바나 설치
 - `entrypoint_sh start`: entrypoint.sh 스크립트를 실행하여 각 서버 엘라스틱서치 설정 동적 setup
+- `kibana start`: 키바나 시작
 
 ---
 
