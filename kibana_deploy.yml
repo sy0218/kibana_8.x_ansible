@@ -1,0 +1,35 @@
+---
+- name: download and install Kibana
+  hosts: servers
+  become: yes
+  vars_files:
+    - /data/work/kibana_8.x_ansible/main.yml
+  tasks:
+    - name: Install apt transport for https protocol
+      shell: 'apt-get install -y apt-transport-https'
+
+    - name: Update apt and install wget and curl
+      shell: 'apt-get update -y && apt-get install -y wget curl'
+
+    - name: Add the Elastic GPG key to apt
+      shell: curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elastic.gpg
+      args:
+        creates: /usr/share/keyrings/elastic.gpg      
+
+    - name: Add Kibana repository for version 8.x
+      shell: echo "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" > /etc/apt/sources.list.d/elastic-8.x.list
+
+    - name: Update apt repositories
+      shell: apt-get update -y
+
+    - name: Install Kibana version 8.x
+      shell: 'apt-get install -y kibana={{ kibana_version }}'
+
+- name: entrypoint_sh start
+  hosts: localhost
+  become: yes
+  vars_files:
+    - /data/work/kibana_8.x_ansible/main.yml
+  tasks:
+    - name: entry_point_sh start
+      shell: "{{ play_book_dir }}/entrypoint.sh"
